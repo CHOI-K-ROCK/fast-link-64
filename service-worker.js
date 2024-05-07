@@ -28,6 +28,8 @@ chrome.contextMenus.onClicked.addListener(function (info, tab) {
             case "main": {
                 if (isLink) {
                     chrome.tabs.create({ url: convertedBase64 });
+                } else {
+                    alert(`❌선택된 base64 문자열이 링크가 아닙니다.\n\n🔽변환결과🔽\n${convertedBase64}`);
                 }
                 break;
             }
@@ -40,7 +42,7 @@ chrome.contextMenus.onClicked.addListener(function (info, tab) {
         }
     } catch (error) {
         if (error.message.startsWith("Failed to execute 'atob'")) {
-            alert("선택된 문자열을 base64 로 변환할 수 없습니다.");
+            alert("❌선택된 문자열을 base64 로 변환할 수 없습니다.");
         } else {
             alert(error.message);
         }
