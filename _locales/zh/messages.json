@@ -1,0 +1,17 @@
+{
+    "extensionDescription": {
+        "message": "如果选定的 Base64 是链接，则轻松导航到该链接。"
+    },
+    "redirectToLink": {
+        "message": "跳转到链接"
+    },
+    "copyToClipboard": {
+        "message": "复制到剪贴板"
+    },
+    "notALink": {
+        "message": "不是链接格式。"
+    },
+    "notBase64": {
+        "message": "不是 base64。"
+    }
+}

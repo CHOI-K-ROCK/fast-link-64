@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
-    "name": "Open Base64 Link",
-    "description": "Easy to redirect base64 link",
+    "name": "Fast Link 64",
+    "description": "__MSG_extensionDescription__",
     "version": "1.0",
     "icons": {
         "16": "images/icon16.png",
@@ -10,9 +10,7 @@
         "128": "images/icon128.png"
     },
     "background": {
-        "service_worker": 
-            "service-worker.js"
-        
+        "service_worker": "service-worker.js"
     },
     "content_scripts": [
         {
@@ -24,7 +22,9 @@
             ]
         }
     ],
+    "default_locale": "en",
     "permissions": [
-        "contextMenus", "tabs", "clipboardWrite"
+        "contextMenus",
+        "clipboardWrite"
     ]
 }

@@ -1,3 +1,7 @@
+// i18n
+const tlm = (key) => chrome.i18n.getMessage(key);
+
+// Create Context Menus
 chrome.contextMenus.create({
     id: "parent",
     title: `Open Base64 Link`,
@@ -7,14 +11,14 @@ chrome.contextMenus.create({
 chrome.contextMenus.create({
     parentId: "parent",
     id: "linkto",
-    title: `링크로 이동`,
+    title: tlm("redirectToLink"),
     contexts: ["selection"],
 });
 
 chrome.contextMenus.create({
     parentId: "parent",
     id: "clipboard",
-    title: `클립보드에 복사`,
+    title: tlm("copyToClipboard"),
     contexts: ["selection"],
 });
 
@@ -22,6 +26,7 @@ const checkIsLink = (string) => {
     return string.startsWith("http://") || string.startsWith("https://");
 };
 
+// Bridges / Update Context Menus
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     const { message, selected } = request;
 
@@ -38,7 +43,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                     const presentString = selected.length > 10 ? slicedText + "..." : convertedBase64;
 
                     chrome.contextMenus.update("parent", {
-                        title: `"${presentString}" 는 링크 형식이 아닙니다.`,
+                        title: `"${presentString}"${tlm("notALink")}`,
                         enabled: false,
                     });
                 }
@@ -48,7 +53,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 const presentString = selected.length > 10 ? slicedText + "..." : selected;
 
                 chrome.contextMenus.update("parent", {
-                    title: `"${presentString}" 는 base64 가 아닙니다.`,
+                    title: `"${presentString}"${tlm("notBase64")}`,
                     enabled: false,
                 });
             }
@@ -56,6 +61,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }
 });
 
+// Context Menus onClick Events
 chrome.contextMenus.onClicked.addListener((info, tab) => {
     try {
         const convertedBase64 = atob(info.selectionText);

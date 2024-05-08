@@ -1,0 +1,17 @@
+{
+    "extensionDescription": {
+        "message": "If the selected Base64 is a link, easily navigate to that link."
+    },
+    "redirectToLink": {
+        "message": "Redirect to Link"
+    },
+    "copyToClipboard": {
+        "message": "Copy to Clipboard"
+    },
+    "notALink": {
+        "message": " is not a link format."
+    },
+    "notBase64": {
+        "message": " is not base64."
+    }
+}

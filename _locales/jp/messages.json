@@ -1,0 +1,17 @@
+{
+    "extensionDescription": {
+        "message": "選択したBase64がリンクであれば、そのリンクに簡単に移動します。"
+    },
+    "redirectToLink": {
+        "message": "リンクに移動"
+    },
+    "copyToClipboard": {
+        "message": "クリップボードにコピー"
+    },
+    "notALink": {
+        "message": "はリンク形式ではありません。"
+    },
+    "notBase64": {
+        "message": "はbase64ではありません。"
+    }
+}
