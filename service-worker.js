@@ -1,50 +1,84 @@
 chrome.contextMenus.create({
-    id: "main",
-    title: `BASE64 링크로 이동`,
+    id: "parent",
+    title: `Open Base64 Link`,
     contexts: ["selection"],
 });
 
-// chrome.contextMenus.create({
-//     parentId: "easy-base-64",
-//     id: "linkto",
-//     title: "해당 링크로 이동하기",
-//     contexts: ["selection"],
-// });
+chrome.contextMenus.create({
+    parentId: "parent",
+    id: "linkto",
+    title: `링크로 이동`,
+    contexts: ["selection"],
+});
 
-// chrome.contextMenus.create({
-//     parentId: "easy-base-64",
-//     id: "paste",
-//     title: "클립보드에 복사하기",
-//     contexts: ["selection"],
-// });
+chrome.contextMenus.create({
+    parentId: "parent",
+    id: "clipboard",
+    title: `클립보드에 복사`,
+    contexts: ["selection"],
+});
 
-// // 컨텍스트 메뉴 클릭 시 동작할 함수 등록
-chrome.contextMenus.onClicked.addListener(function (info, tab) {
+const checkIsLink = (string) => {
+    return string.startsWith("http://") || string.startsWith("https://");
+};
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    const { message, selected } = request;
+
+    switch (message) {
+        case "updateSelection": {
+            try {
+                const convertedBase64 = atob(selected);
+                checkIsLink(convertedBase64);
+
+                if (checkIsLink(convertedBase64)) {
+                    chrome.contextMenus.update("parent", { title: convertedBase64, enabled: true });
+                } else {
+                    const slicedText = convertedBase64.slice(0, 10);
+                    const presentString = selected.length > 10 ? slicedText + "..." : convertedBase64;
+
+                    chrome.contextMenus.update("parent", {
+                        title: `"${presentString}" 는 링크 형식이 아닙니다.`,
+                        enabled: false,
+                    });
+                }
+                break;
+            } catch (err) {
+                const slicedText = selected.slice(0, 10);
+                const presentString = selected.length > 10 ? slicedText + "..." : selected;
+
+                chrome.contextMenus.update("parent", {
+                    title: `"${presentString}" 는 base64 가 아닙니다.`,
+                    enabled: false,
+                });
+            }
+        }
+    }
+});
+
+chrome.contextMenus.onClicked.addListener((info, tab) => {
     try {
         const convertedBase64 = atob(info.selectionText);
-        const isLink = convertedBase64.startsWith("http://") || convertedBase64.startsWith("https://");
+        const isLink = checkIsLink(convertedBase64);
 
         switch (info.menuItemId) {
-            case "main": {
+            case "linkto": {
                 if (isLink) {
                     chrome.tabs.create({ url: convertedBase64 });
-                } else {
-                    alert(`❌선택된 base64 문자열이 링크가 아닙니다.\n\n🔽변환결과🔽\n${convertedBase64}`);
                 }
                 break;
             }
-            // case "linkto": {
-            //     break;
-            // }
-            // case "paste": {
-            //     break;
-            // }
+            case "clipboard": {
+                chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+                    chrome.tabs.sendMessage(tabs[0].id, {
+                        message: "copyText",
+                        textToCopy: convertedBase64,
+                    });
+                });
+                break;
+            }
         }
     } catch (error) {
-        if (error.message.startsWith("Failed to execute 'atob'")) {
-            alert("❌선택된 문자열을 base64 로 변환할 수 없습니다.");
-        } else {
-            alert(error.message);
-        }
+        alert(error.message);
     }
 });
