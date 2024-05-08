@@ -2,6 +2,7 @@
 const tlm = (key) => chrome.i18n.getMessage(key);
 
 // Create Context Menus
+
 chrome.contextMenus.create({
     id: "parent",
     title: `Open Base64 Link`,
@@ -85,6 +86,9 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
             }
         }
     } catch (error) {
-        alert(error.message);
+        chrome.tabs.sendMessage(tabs[0].id, {
+            message: "alert",
+            alertMsg: error.message,
+        });
     }
 });

@@ -12,10 +12,13 @@ document.addEventListener("mousedown", (event) => {
 });
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    const { message, textToCopy } = request;
+    const { message, textToCopy, alertMsg } = request;
     switch (message) {
         case "copyText": {
             navigator.clipboard.writeText(textToCopy);
+        }
+        case "alert": {
+            alert(alertMsg)
         }
     }
 });

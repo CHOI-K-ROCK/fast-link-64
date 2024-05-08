@@ -1,5 +1,5 @@
 {
-    "manifest_version": 3,
+    "manifest_version": 2,
     "name": "Fast Link 64",
     "description": "__MSG_extensionDescription__",
     "version": "1.0",
@@ -10,7 +10,7 @@
         "128": "images/icon128.png"
     },
     "background": {
-        "service_worker": "service-worker.js"
+        "scripts": ["service-worker.js"]
     },
     "content_scripts": [
         {
