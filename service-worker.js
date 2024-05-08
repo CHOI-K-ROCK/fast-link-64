@@ -35,7 +35,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         case "updateSelection": {
             try {
                 const convertedBase64 = atob(selected);
-                checkIsLink(convertedBase64);
 
                 if (checkIsLink(convertedBase64)) {
                     chrome.contextMenus.update("parent", { title: convertedBase64, enabled: true });
@@ -92,3 +91,4 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
         });
     }
 });
+

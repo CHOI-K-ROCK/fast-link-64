@@ -16,9 +16,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     switch (message) {
         case "copyText": {
             navigator.clipboard.writeText(textToCopy);
+            break;
         }
         case "alert": {
-            alert(alertMsg)
+            alert(alertMsg);
+            break;
         }
     }
 });
+
+
